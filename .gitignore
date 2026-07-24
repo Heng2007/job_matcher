@@ -1,0 +1,11 @@
+data/
+models/
+.env
+__pycache__/
+*.py[cod]
+*.sqlite
+.DS_Store
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/

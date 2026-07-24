@@ -1,0 +1,60 @@
+"""Project-wide constants: filesystem paths, category names, database filename.
+
+Responsible for: the single place every other module reads paths and the
+category list from, so nothing hardcodes a directory or a category string.
+
+Inputs: none — this module holds literals only, no logic and no environment
+reads.
+
+Outputs: path constants for the data, model and database locations; the 8
+category names used by the classifier; the database filename.
+
+How I'll know it works: every module imports its paths and categories from
+here, and changing a path in this file changes it everywhere.
+"""
+
+# --- Paths ---
+PROJECT_ROOT = "."
+DATA_DIR = "data"
+RAW_DATA_DIR = "data/raw"
+PROCESSED_DATA_DIR = "data/processed"
+DB_DIR = "db"
+MODELS_DIR = "models"
+SCHEMA_PATH = "db/schema.sql"
+SKILLS_PROFILE_PATH = "my_skills.json"
+SEED_LABELS_PATH = "seed_labels.csv"
+
+# --- Database ---
+DB_FILENAME = "jobintel.sqlite"
+DB_PATH = "db/jobintel.sqlite"
+
+# --- Categories (8-way classifier) ---
+CATEGORIES = [
+    "Classical ML",
+    "Deep learning",
+    "NLP / LLM",
+    "Data analyst",
+    "Software engineering",
+    "Research assistant",
+    "Quant / finance",
+    "Not relevant",
+]
+
+NOT_RELEVANT_CATEGORY = "Not relevant"
+
+# --- Sources ---
+SOURCES = ["greenhouse", "kaggle", "uoft"]
+
+# --- Cleaning thresholds ---
+MIN_DESCRIPTION_LENGTH = 200
+
+# --- Junior-eligibility title regexes (Streamlit tab 2 filter) ---
+JUNIOR_TITLE_PATTERN = r"intern|junior|new grad|research assistant"
+SENIOR_TITLE_PATTERN = r"senior|staff|principal|lead"
+
+# --- Near-miss threshold (match_scoring) ---
+NEAR_MISS_MAX_MISSING_SKILLS = 2
+
+# --- External endpoints ---
+GREENHOUSE_API_BASE = "https://boards-api.greenhouse.io/v1/boards"
+EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
