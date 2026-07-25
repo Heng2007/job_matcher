@@ -23,6 +23,7 @@ MODELS_DIR = "models"
 SCHEMA_PATH = "db/schema.sql"
 SKILLS_PROFILE_PATH = "my_skills.json"
 SEED_LABELS_PATH = "seed_labels.csv"
+GREENHOUSE_TOKENS_PATH = "data/raw/greenhouse_tokens.txt"
 
 # --- Database ---
 DB_FILENAME = "jobintel.sqlite"
