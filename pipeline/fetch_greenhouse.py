@@ -44,8 +44,8 @@ for company in companies:
         continue
 
     if rq.json()["jobs"].__len__() == 0:
-            print(f"No open roles found for {company}. Skipping.")
-            continue
+         print(f"No open roles found for {company}. Skipping.")
+         continue
 
     for jobs in rq.json()["jobs"]:
         rows.append({
