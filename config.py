@@ -24,8 +24,11 @@ SCHEMA_PATH = "db/schema.sql"
 SKILLS_PROFILE_PATH = "my_skills.json"
 SEED_LABELS_PATH = "seed_labels.csv"
 GREENHOUSE_TOKENS_PATH = "data/raw/greenhouse_tokens.txt"
-KAGGLE_CSV_PATH = "data/raw/postings.csv"        # the file downloaded from Kaggle
-KAGGLE_OUTPUT_PATH = "data/raw/kaggle.csv"
+KAGGLE_INPUT_DATA = "data/raw/postings.csv"        
+KAGGLE_OUTPUT_DATA = "data/raw/kaggle.csv"
+UOFT_INPUT_DATA = "data/raw/uoft_workstudy_summer2025.csv"
+UOFT_OUTPUT_DATA = "data/raw/uoft.csv"
+GREENHOUSE_OUTPUT_DATA = "data/raw/greenhouse.csv"
 
 # --- Database ---
 DB_FILENAME = "jobintel.sqlite"
@@ -53,7 +56,7 @@ MIN_DESCRIPTION_LENGTH = 200
 
 # --- Sampling / reproducibility ---
 KAGGLE_SAMPLE_SIZE = 1200
-RANDOM_SEED = 42                 # shared: Kaggle sample + Week 4 train/test split
+RANDOM_SEED = 42                
 
 # --- Junior-eligibility title regexes (Streamlit tab 2 filter) ---
 JUNIOR_TITLE_PATTERN = r"intern|junior|new grad|research assistant"

@@ -25,16 +25,12 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import config
 
-raw_data = pd.read_csv(config.KAGGLE_CSV_PATH)  # changed: path from config, not hardcoded
+raw_data = pd.read_csv(config.KAGGLE_INPUT_DATA)
 fetched_at = pd.Timestamp.now()
 
 
-
-
-
-
 raw_data = raw_data.dropna(subset=["company_name"])
-# changed: sample size and seed from config, not hardcoded
+
 sampled_data = raw_data.sample(n=config.KAGGLE_SAMPLE_SIZE, random_state=config.RANDOM_SEED)
 sampled_data["fetched_at"] = fetched_at
 sampled_data = sampled_data[["job_id", "company_name", "title", "description", "job_posting_url", "fetched_at"]]
@@ -43,4 +39,4 @@ sampled_data = sampled_data.rename(columns={"job_id": "external_id",
                                               "job_posting_url": "url"})
 
 
-sampled_data.to_csv(config.KAGGLE_OUTPUT_PATH, index=False)  # changed: path from config
+sampled_data.to_csv(config.KAGGLE_OUTPUT_DATA, index=False)  

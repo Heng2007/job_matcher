@@ -16,3 +16,22 @@ How I'll know it works: tests/test_combine.py passes — HTML tags are gone from
 descriptions, a posting appearing twice survives only once, and rows under 200
 characters are absent from the output.
 """
+#    a. load all three raw files,
+#    b. rename columns so every source has exactly: title, description, source, url,
+#    c. strip HTML tags from descriptions (the Greenhouse ones),
+#    d. drop rows whose description is shorter than ~200 characters,
+#    e. drop duplicates (same title + same company),
+#    f. save `data/processed/all_postings.csv`.
+
+import pandas as pd
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+import config
+
+kaggle = pd.read_csv(config.KAGGLE_OUTPUT_DATA)
+uoft = pd.read_csv(config.UOFT_OUTPUT_DATA)
+greenhouse = pd.read_csv(config.GREENHOUSE_OUTPUT_DATA)
+
+print(kaggle.keys(),"/n", uoft.keys(), "/n", greenhouse.keys())
