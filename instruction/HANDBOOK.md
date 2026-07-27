@@ -68,20 +68,35 @@ will not work around it.
    save to `data/raw/kaggle.csv`. (Sample — do not load all 120k rows into
    your pipeline.)
 
-**Part C — Combine everything**
+**Part C — UofT work-study postings**
 
-8. Copy your UofT xlsx into `data/raw/`.
-9. Write `pipeline/combine.py`. It must, in this order:
+8. Copy your UofT csv into `data/raw/`. It is a raw CLNx export with 17
+   columns and does NOT match the column contract the two fetchers produce —
+   no `company`, no `url`, no `fetched_at`, and the skills you care about sit
+   in a separate `Qualifications` column, not in `Description`.
+9. Write `pipeline/fetch_uoft.py`: read `config.UOFT_INPUT_DATA`, map it onto
+   `external_id, company, title, description, url, fetched_at`, save to
+   `config.UOFT_OUTPUT_DATA`. Its docstring lists the four judgment calls
+   (what goes into `description`, what counts as `company`, what to do about
+   the missing url, and how to treat `Num. Posts`).
+10. Check the output: 837 rows, six columns, same order as `kaggle.csv`.
+
+**Part D — Combine everything**
+
+11. Write `pipeline/combine.py`. It must, in this order:
    a. load all three raw files,
-   b. rename columns so every source has exactly: title, description, source, url,
+   b. add the `source` column so every source has exactly: title, description,
+      source, url (all three raw files already share the column contract —
+      only Greenhouse and Kaggle need no renaming, and UofT was normalized in
+      Part C),
    c. strip HTML tags from descriptions (the Greenhouse ones),
    d. drop rows whose description is shorter than ~200 characters,
    e. drop duplicates (same title + same company),
    f. save `data/processed/all_postings.csv`.
-10. Sanity-check: open the CSV, read 10 random descriptions. They should be
+12. Sanity-check: open the CSV, read 10 random descriptions. They should be
     clean readable text, no `<p>` or `&amp;` junk. If you see junk, your HTML
     stripping missed something — fix before continuing.
-11. Commit: "Phase 1: data pipeline".
+13. Commit: "Phase 1: data pipeline".
 
 ✅ **Done when:** `all_postings.csv` has roughly 2,000 rows, 4 columns, clean text.
 
