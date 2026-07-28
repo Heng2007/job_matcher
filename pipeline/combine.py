@@ -25,13 +25,25 @@ characters are absent from the output.
 
 import pandas as pd
 import sys
+from bs4 import BeautifulSoup
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import config
 
+
+greenhouse = pd.read_csv(config.GREENHOUSE_OUTPUT_DATA)
 kaggle = pd.read_csv(config.KAGGLE_OUTPUT_DATA)
 uoft = pd.read_csv(config.UOFT_OUTPUT_DATA)
-greenhouse = pd.read_csv(config.GREENHOUSE_OUTPUT_DATA)
 
-print(kaggle.keys(),"/n", uoft.keys(), "/n", greenhouse.keys())
+greenhouse["source"] = config.SOURCES[0]
+kaggle["source"] = config.SOURCES[1]
+uoft["source"] = config.SOURCES[2]
+
+
+for i in range(len(greenhouse)):
+    greenhouse.loc[i, "description"] = BeautifulSoup(greenhouse.loc[i, "description"], 
+                                                       "html.parser").get_text(" ")
+
+
+print(greenhouse["description"].iloc[1])
