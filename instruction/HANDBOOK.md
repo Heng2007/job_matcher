@@ -85,12 +85,26 @@ will not work around it.
 
 11. Write `pipeline/combine.py`. It must, in this order:
    a. load all three raw files,
-   b. add the `source` column so every source has exactly: title, description,
-      source, url (all three raw files already share the column contract —
-      only Greenhouse and Kaggle need no renaming, and UofT was normalized in
-      Part C),
-   c. strip HTML tags from descriptions (the Greenhouse ones),
-   d. drop rows whose description is shorter than ~200 characters,
+   b. tag each frame with its source ('greenhouse', 'kaggle', 'uoft' — the
+      values in `config.SOURCES`) and concatenate with `ignore_index=True`.
+      There is nothing to rename: all three raw CSVs already share the column
+      contract, so `source` is the only missing column, and once the frames
+      are concatenated the filename that used to carry that fact is gone.
+      Without `ignore_index=True` the three frames keep their own 0-based
+      labels, so the combined index repeats and any later `.loc[i]` hits
+      several rows at once,
+   c. strip HTML tags from descriptions. Run this over the *combined* frame,
+      not Greenhouse alone: Greenhouse is where the bulk is (all 5,447 rows
+      carry tags) but Kaggle has 1 and UofT 6, and one pass covers all three.
+      `BeautifulSoup(x, "html.parser").get_text(" ")` handles the entities
+      (`&nbsp;`, `&amp;`) too, so no separate `html.unescape` is needed here —
+      and unlike a regex it will not eat literal `&lt;text&gt;` that is
+      content rather than markup. Pass a separator: `get_text()` with no
+      argument glues words together across `</p><p>` boundaries,
+   d. drop rows whose description is shorter than `config.MIN_DESCRIPTION_LENGTH`
+      (200). This is a filter, so keep the rows you want with a boolean mask —
+      `combined[combined["description"].str.len() >= config.MIN_DESCRIPTION_LENGTH]`
+      — rather than dropping rows one at a time while iterating the frame,
    e. drop duplicates (same title + same company),
    f. save `data/processed/all_postings.csv`.
 12. Sanity-check: open the CSV, read 10 random descriptions. They should be
@@ -242,10 +256,30 @@ production model is whichever won.
 3. Write `analysis/match_scoring.py`:
    - match score per posting = (skills you have ∩ skills it wants) / (skills it wants)
    - near-miss list = postings where you're missing 2 or fewer skills
-   - junior filter = title contains intern/junior/new grad/research assistant
-     and does NOT contain senior/staff/principal/lead
+   - junior filter = title matches `config.JUNIOR_TITLE_PATTERN` and does NOT
+     match `config.SENIOR_TITLE_PATTERN`. Both patterns are whole-word
+     (`\b...\b`) — without that, "intern" matches inside "Internal" and
+     "International", and "lead" inside "Leadership".
    - the unlock table: for each skill you lack, how many additional postings
      would become near-misses if you learned it — sorted descending.
+
+   **Known limit of the title filter, measured on the 5,447 Greenhouse rows.**
+   A title is a name, not a requirement, so it cannot tell you a posting wants
+   8 years of experience. Cross-checking titles against the years stated in
+   the descriptions:
+   - 35 postings pass the junior title test; exactly **1** of them is a fake
+     ("Junior Software Engineer" asking for 7 years).
+   - **358** postings ask for ≤1 year but fail the title test, because their
+     titles are things like "Data Analyst" with no junior keyword.
+
+   So the filter throws away roughly 358 good postings to catch 1 bad one, and
+   tightening the title words makes that worse. If you want to fix it, the
+   signal is in the description — 4,636 of 5,447 postings (85%) state a years
+   requirement, extractable with something like `(\d{1,2})\s*\+?\s*year`.
+   Eligibility then becomes "junior title OR stated years ≤ 2, minus senior
+   title, minus years ≥ 5". Decide in this week whether it is worth the
+   complexity; the plain title filter is a defensible v1 as long as the README
+   says what it misses.
 4. Look at the unlock table. That ranked list is your actual, data-derived
    learning plan. Sanity-check it against intuition (PyTorch and SQL should
    rank high; if MATLAB ranks #1, inspect why before believing it).

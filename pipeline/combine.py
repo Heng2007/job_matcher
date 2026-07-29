@@ -1,11 +1,20 @@
 """Normalize and merge raw posting CSVs into one clean dataset.
 
-Responsible for: taking everything in data/raw (Greenhouse, Kaggle, my UofT
-work-study xlsx) and turning it into a single table with consistent columns;
-stripping HTML out of descriptions; dropping duplicates; and filtering out
-postings too short to classify.
+Responsible for: taking the three normalized raw CSVs (greenhouse.csv,
+kaggle.csv, uoft.csv) and turning them into a single table; stripping HTML out
+of descriptions; dropping duplicates; and filtering out postings too short to
+classify.
 
-Inputs: all raw CSV/xlsx files in data/raw.
+Nothing here renames columns. All three producers already write the same six
+columns, so the only column missing is `source` — the one fact the raw files
+cannot carry, because each fetcher writes its own file and the source lives in
+the filename until the frames are concatenated. Tag each frame from
+config.SOURCES, then concat with ignore_index=True so the three 0-based indexes
+do not overlap.
+
+Inputs: config.GREENHOUSE_OUTPUT_DATA, config.KAGGLE_OUTPUT_DATA and
+config.UOFT_OUTPUT_DATA — the OUTPUT paths, never the INPUT ones. The UofT
+export is normalized by pipeline/fetch_uoft.py before it gets here.
 
 Outputs: one combined CSV in data/processed with columns title, description,
 source, url (plus external_id, company, fetched_at carried through), HTML
@@ -41,13 +50,18 @@ kaggle["source"] = config.SOURCES[1]
 uoft["source"] = config.SOURCES[2]
 
 
+
 for i in range(len(greenhouse)):
     greenhouse.loc[i, "description"] = BeautifulSoup(greenhouse.loc[i, "description"], 
                                                        "html.parser").get_text("\n"+ " ")
 
 combined = pd.concat([greenhouse, kaggle, uoft])
 combined.drop_duplicates(subset=["title", "company"], inplace=True)
-combined.apply(lambda x: combined.drop(combined["description"].iloc[x]) if 
-               len(combined["description"]< 200) else None, axis = 1)
+combined = combined[combined["description"].str.len() > config.MIN_DESCRIPTION_LENGTH]
+combined.dropna(subset=["title", "description", "source", "url"], inplace=True)
+combined.to_csv(config.PROCESSED_DATA_DIR + "/all_postings.csv", index=False)
+
+
+
 
 print(greenhouse["description"].iloc[1])

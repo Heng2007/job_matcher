@@ -98,7 +98,12 @@ job-intel/
    assistant, Quant / finance, Not relevant. Relevance score = 1 − P(Not relevant).
 2. **Skill extraction is regex, not ML.** Word-boundary patterns for short
    tokens (R, AI, ML, NLP, LLM) — plain substring matching false-positives on
-   words like "training" and "enrollment".
+   words like "training" and "enrollment". **The same rule applies to the
+   junior/senior title patterns in `config.py`**, which originally lacked it:
+   "intern" matched inside "Internal" and "International", and "lead" inside
+   "Leadership". Every regex in this project that matches a short word matches
+   it whole (`\b...\b`), and uses non-capturing groups `(?:...)` so
+   `pandas.Series.str.contains` does not warn about unused match groups.
 3. **SQLite, not Postgres.** No server; the tool is single-user.
 4. **Embeddings are conditional.** Kept only if they beat TF-IDF on macro-F1;
    otherwise noted in README and dropped.
@@ -156,9 +161,17 @@ category, detected skills (green = owner has, red = missing), learning
 priority (missing skills sorted by tier).
 
 Tab 2 — "My matches & plan": table of postings ranked by match %, filter
-toggle for junior-eligible (title regex: intern|junior|new grad|research
-assistant, exclude senior|staff|principal|lead), near-miss list, and the
-"learn X → unlock N postings" bar chart.
+toggle for junior-eligible (`config.JUNIOR_TITLE_PATTERN`, excluding
+`config.SENIOR_TITLE_PATTERN`), near-miss list, and the "learn X → unlock N
+postings" bar chart.
+
+The junior toggle is a coarse title heuristic, not a judgment of eligibility —
+it cannot see that a posting titled "intern" wants 8 years of experience,
+because that lives in the description. Measured on the Greenhouse corpus it
+admits 1 fake junior per 35 and discards 358 postings asking for ≤1 year whose
+titles carry no junior keyword. Ranking by match % is what actually protects
+against over-senior postings: they demand skills the owner lacks and sink on
+their own. Keep the toggle off by default so it narrows rather than hides.
 
 Until the ML stubs are implemented, the app should run with graceful
 placeholders ("model not trained yet") rather than crash.

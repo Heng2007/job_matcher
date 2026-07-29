@@ -5,10 +5,16 @@ Tab 1, "Analyze a posting": paste a job description, get back relevance %,
 predicted category, detected skills colour-coded (green = I have it, red =
 missing), and a learning priority list of the missing skills ordered by tier.
 Tab 2, "My matches & plan": postings ranked by match %, a junior-eligible
-filter (title matches intern|junior|new grad|research assistant, excluding
-senior|staff|principal|lead), the near-miss list, and the "learn X -> unlock N
-postings" bar chart. Until the models exist, the app shows "model not trained
-yet" placeholders instead of crashing.
+filter (config.JUNIOR_TITLE_PATTERN, excluding config.SENIOR_TITLE_PATTERN —
+read them from config, never re-type the words here), the near-miss list, and
+the "learn X -> unlock N postings" bar chart. Until the models exist, the app
+shows "model not trained yet" placeholders instead of crashing.
+
+The junior toggle defaults to OFF. It is a coarse title heuristic that discards
+roughly 358 postings asking for <= 1 year for every 1 fake junior it catches
+(measured on the Greenhouse corpus), so it should narrow the list on request
+rather than silently hide most of it. Ranking by match % is what actually keeps
+over-senior postings off the top.
 
 Inputs: the database at db/jobintel.sqlite; the saved model artifacts in
 models/; my_skills.json; pasted text from the user.
