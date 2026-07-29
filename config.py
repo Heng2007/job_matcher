@@ -59,8 +59,8 @@ KAGGLE_SAMPLE_SIZE = 1200
 RANDOM_SEED = 42                
 
 # --- Junior-eligibility title regexes (Streamlit tab 2 filter) ---
-JUNIOR_TITLE_PATTERN = r"intern|junior|new grad|research assistant"
-SENIOR_TITLE_PATTERN = r"senior|staff|principal|lead"
+JUNIOR_TITLE_PATTERN = r"\b(intern|interns|internship|internships|junior|new grad|new graduate|research assistant)\b"
+SENIOR_TITLE_PATTERN = r"\b(senior|sr|staff|principal|lead)\b"
 
 # --- Near-miss threshold (match_scoring) ---
 NEAR_MISS_MAX_MISSING_SKILLS = 2

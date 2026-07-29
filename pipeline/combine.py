@@ -43,7 +43,11 @@ uoft["source"] = config.SOURCES[2]
 
 for i in range(len(greenhouse)):
     greenhouse.loc[i, "description"] = BeautifulSoup(greenhouse.loc[i, "description"], 
-                                                       "html.parser").get_text(" ")
+                                                       "html.parser").get_text("\n"+ " ")
 
+combined = pd.concat([greenhouse, kaggle, uoft])
+combined.drop_duplicates(subset=["title", "company"], inplace=True)
+combined.apply(lambda x: combined.drop(combined["description"].iloc[x]) if 
+               len(combined["description"]< 200) else None, axis = 1)
 
 print(greenhouse["description"].iloc[1])
