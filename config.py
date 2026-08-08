@@ -29,6 +29,8 @@ KAGGLE_OUTPUT_DATA = "data/raw/kaggle.csv"
 UOFT_INPUT_DATA = "data/raw/uoft_workstudy_summer2025.csv"
 UOFT_OUTPUT_DATA = "data/raw/uoft.csv"
 GREENHOUSE_OUTPUT_DATA = "data/raw/greenhouse.csv"
+PROCESSED_OUTPUT_DATA = "data/processed/all_postings.csv"
+
 
 # --- Database ---
 DB_FILENAME = "jobintel.sqlite"
