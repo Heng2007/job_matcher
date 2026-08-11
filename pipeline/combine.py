@@ -53,14 +53,13 @@ uoft["source"] = config.SOURCES[2]
 
 
 combined = pd.concat([greenhouse, kaggle, uoft],ignore_index = True)
-
+combined.dropna(subset=["title", "description"], inplace=True) 
 for i in range(len(combined)):
-    combined.loc[i, "description"] = BeautifulSoup(combined.loc[i, "description"], 
-                                                   "html.parser").get_text("\n"+ " ")
+    combined.loc[i, "description"] = BeautifulSoup(str(combined.loc[i, "description"]),"html.parser").get_text("\n")
 
 combined.drop_duplicates(subset=["title", "company"], inplace=True)
 combined = combined[combined["description"].str.len() > config.MIN_DESCRIPTION_LENGTH]
-combined.dropna(subset=["title", "description"], inplace=True)
+
 combined.to_csv(config.PROCESSED_DATA_DIR + "/all_postings.csv", index=False)
 
 

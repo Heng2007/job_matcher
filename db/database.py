@@ -34,6 +34,7 @@ def create_schema(conn: sqlite3.Connection):
         conn.executescript(f.read())
 
 def upsert_postings(conn: sqlite3.Connection):
+    """Upsert observations from cleaned csv to table postings"""
     df = pd.read_csv(config.PROCESSED_OUTPUT_DATA)
     cur = conn.cursor()
 
@@ -44,9 +45,17 @@ def upsert_postings(conn: sqlite3.Connection):
 
     return cur.rowcount, len(df) - cur.rowcount 
 
+def row_count(conn:sqlite3.Connection):
+    """Return number of post that lives in the table - posting"""
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM postings")
+    return cur.fetchall()[0][0]
+
+
+
+
+
 create_schema(conn)
 print(upsert_postings(conn))
-
-
 
 
