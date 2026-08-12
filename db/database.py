@@ -45,6 +45,22 @@ def upsert_postings(conn: sqlite3.Connection):
 
     return cur.rowcount, len(df) - cur.rowcount 
 
+def insert_skills(conn: sqlite3.Connection, rows):
+    """Insert (name, tier) pairs into the skills table.
+
+    skills.name is UNIQUE, so re-running inserts nothing the second time.
+    Returns (inserted, ignored) the same way upsert_postings does.
+    """
+    rows = list(rows)
+    cur = conn.cursor()
+
+    cur.executemany("INSERT OR IGNORE INTO skills(name, tier)"
+                    "VALUES(?,?)"
+                    , rows)
+    conn.commit()
+
+    return cur.rowcount, len(rows) - cur.rowcount
+
 def row_count(conn:sqlite3.Connection):
     """Return number of post that lives in the table - posting"""
     cur = conn.cursor()

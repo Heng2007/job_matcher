@@ -1,0 +1,29 @@
+title,description,category
+Machine Learning Engineer,"Build and deploy machine learning models to production. Work with feature pipelines, model monitoring, and A/B testing frameworks. Requires Python and scikit-learn, experience with Random Forest and XGBoost a plus.",Classical ML
+Applied ML Scientist,"Develop classification and regression models for fraud detection. Strong background in logistic regression, gradient boosting, and cross-validation required.",Classical ML
+Data Science Intern,"Support the data science team building predictive models using scikit-learn. Python required, comfort with pandas and numpy expected.",Classical ML
+Deep Learning Research Scientist,"Design and train large neural networks for computer vision. Work with PyTorch and distributed GPU training, publish at top ML conferences.",Deep learning
+Computer Vision Engineer,"Build convolutional neural network models for object detection. TensorFlow or PyTorch experience required, CNN architecture design a plus.",Deep learning
+"Research Assistant, Deep Learning Lab",Assist faculty training LSTM and autoencoder models for time-series prediction. Python and PyTorch coursework expected.,Deep learning
+NLP Engineer,Fine-tune transformer models for text classification and sentiment analysis. Work with HuggingFace and BERT-based architectures daily.,NLP / LLM
+"Applied Scientist, Generative AI",Build retrieval-augmented generation systems on top of large language models. Prompt engineering and HuggingFace experience required.,NLP / LLM
+Conversational AI Developer,"Build chatbot features using LLM APIs, implement RAG pipelines, and evaluate generative AI output quality.",NLP / LLM
+Data Analyst,"Build dashboards in Tableau, write SQL queries against the data warehouse, and present insights to stakeholders weekly.",Data analyst
+Business Intelligence Analyst,"Create Power BI reports, maintain KPI dashboards, and support ad hoc SQL reporting requests from leadership.",Data analyst
+Junior Data Analyst,"Clean and analyze marketing data in Excel and SQL, build recurring reporting dashboards for the growth team.",Data analyst
+Backend Software Engineer,"Build scalable REST APIs in Python and Go, design database schemas, and own the CI/CD pipeline for our microservices.",Software engineering
+Full Stack Developer,"Develop features across our React frontend and Django backend, write unit tests, and participate in code review.",Software engineering
+Platform Engineer,"Maintain our Docker and AWS infrastructure, build internal developer tooling, and support our Git-based deployment workflow.",Software engineering
+Undergraduate Research Assistant,Assist faculty with data collection and statistical analysis for a psychology study. Some Python or R experience preferred.,Research assistant
+"Research Assistant, Biology Lab","Support wet-lab experiments, maintain lab notebooks, and assist with literature review for the principal investigator.",Research assistant
+Summer Research Assistant,"Help the lab collect and organize survey data, assist with literature review and manuscript preparation.",Research assistant
+Quantitative Analyst,Develop trading strategies using statistical and stochastic models. Strong background in probability and portfolio theory required.,Quant / finance
+Quant Research Intern,"Build and backtest risk models for the trading desk, strong Python and statistics background required.",Quant / finance
+Financial Data Analyst,Support the portfolio management team with quantitative analysis of trading strategies and risk exposure.,Quant / finance
+Retail Store Associate,"Assist customers on the sales floor, operate the cash register, and restock shelves during weekend shifts.",Not relevant
+Administrative Assistant,"Manage scheduling, answer phones, and support day-to-day office operations for the department.",Not relevant
+Marketing Coordinator,"Plan social media campaigns, coordinate with the design team, and track engagement metrics for events.",Not relevant
+Campus Tour Guide,"Lead prospective students and families on campus tours, answer questions about student life and academics.",Not relevant
+Event Planning Assistant,"Support logistics for on-campus events, coordinate with vendors, and help set up event spaces.",Not relevant
+Library Assistant,"Shelve returned books, assist patrons at the front desk, and support general library operations.",Not relevant
+Communications Assistant,"Draft newsletter content, update the department website, and support general communications tasks.",Not relevant
