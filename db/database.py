@@ -69,9 +69,9 @@ def row_count(conn:sqlite3.Connection):
 
 
 
+if __name__ == "__main__":
+    create_schema(conn)
+    print(upsert_postings(conn))
 
-
-create_schema(conn)
-print(upsert_postings(conn))
 
 

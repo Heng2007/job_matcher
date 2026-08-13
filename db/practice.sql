@@ -17,4 +17,6 @@ LIMIT 1;
 
 
 
-SELECT AVG(LENGTH(description)), source from postings GROUP BY source;
+SELECT AVG(LENGTH(description)), source 
+from postings 
+GROUP BY source;

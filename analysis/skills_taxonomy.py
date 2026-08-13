@@ -23,6 +23,11 @@ exactly the expected skills, and the word-boundary cases behave: "enrollment"
 does not match R, "training" does not match AI, "R and Python" does match R.
 """
 import re
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+import config
 
 SKILL_PATTERNS: dict[str, str] = {
     # Programming languages
@@ -92,16 +97,7 @@ SKILL_TIER: dict[str, int] = {
     "Linux": 2, "AWS": 3, "Docker": 3, "SLURM/HPC": 4, "SVM": 2,
 }
 
-CATEGORIES = [
-    "Classical ML",
-    "Deep learning",
-    "NLP / LLM",
-    "Data analyst",
-    "Software engineering",
-    "Research assistant",
-    "Quant / finance",
-    "Not relevant",
-]
+CATEGORIES = config.CATEGORIES
 
 # Rough keyword cues per category -- useful as a weak-labeling heuristic to
 # pre-fill labels before you review them, not a substitute for real labeling.
@@ -131,4 +127,4 @@ def weak_label_category(text: str) -> str:
     text = text.lower()
     scores = {cat: sum(1 for kw in kws if kw in text) for cat, kws in CATEGORY_HINTS.items()}
     best = max(scores, key=lambda cat: scores[cat])
-    return best if scores[best] > 0 else "Not relevant"
+    return best if scores[best] > 0 else config.NOT_RELEVANT_CATEGORY
