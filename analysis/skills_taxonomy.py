@@ -123,8 +123,11 @@ def extract_skills(text: str) -> list[str]:
 
 def weak_label_category(text: str) -> str:
     """Cheap keyword-based guess at category -- use to pre-fill labels for
-    faster manual review, never as the final ground truth."""
+    faster manual review."""
     text = text.lower()
-    scores = {cat: sum(1 for kw in kws if kw in text) for cat, kws in CATEGORY_HINTS.items()}
+    scores = {cat: sum(1 for kw in kws if re.search(rf"\b{re.escape(kw)}\b", text))
+              for cat, kws in CATEGORY_HINTS.items()}
     best = max(scores, key=lambda cat: scores[cat])
     return best if scores[best] > 0 else config.NOT_RELEVANT_CATEGORY
+
+

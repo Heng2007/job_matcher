@@ -148,31 +148,60 @@ questions with SELECT statements.
 
 **Goal: every posting has one of the 8 categories, and you know how much to trust the labels.**
 
+> **Deviation from PROJECT_SPEC, decided 2026-08-14.** The original plan bought
+> a Claude API key and ran `ml/label_llm.py` over the corpus (~$3.50). I'm doing
+> the same job through Claude Code instead — same model, no key, no spend. The
+> structure is unchanged: I hand-label a sample as ground truth, an LLM labels
+> the rest, and I measure the agreement between them. Only the transport
+> changes. `label_source` stays `'llm'` for the machine-labeled rows because
+> that is what they are.
+
 1. Hand-labeling first. Pull 150–200 postings out of the database (mix of all
    three sources). Put them in a spreadsheet with an empty `category` column.
+   **Seed the sample so all 8 categories actually appear in it** — run
+   `analysis.skills_taxonomy.weak_label_category(f"{title} {description}")`
+   over the corpus and draw from each category's pool, plus a random slice.
+   A purely random 200 gives ~0 Classical ML rows, and a category with no
+   training examples destroys macro-F1 in Week 4. The keyword guess only
+   decides *which postings you see*; every label is still yours.
 2. Label them yourself in 30-minute sittings across the week (about 40–50 per
    sitting). Use exactly the 8 category names from `config.py` — a typo like
    "NLP/LLM" vs "NLP / LLM" will break training later.
 3. While labeling, write down (in a notes file) which categories you found
    hard to tell apart. This becomes your README's limitations section.
-4. Get a Claude API key (console.anthropic.com), put it in `.env` (never in
-   code, never committed — `.gitignore` already covers `.env`).
-5. Write `ml/label_llm.py`: send postings in batches of ~20, ask for JSON
-   back with a category per posting constrained to your 8 names, save results
-   incrementally after every batch (so a crash mid-run loses one batch, not
-   everything).
-6. Test on 40 postings you already hand-labeled. Compare. If agreement is
-   below ~75%, improve your prompt (add one example posting per category to
-   it) before running the full batch.
-7. Run over all remaining postings. Store labels in the `labels` table with
+4. ~~Get a Claude API key.~~ **Skipped — no key, no `.env`, no spend.** Claude
+   Code does the labeling directly. (Revisit this in Week 10 if the Streamlit
+   app needs to classify pasted postings live — that call has to happen inside
+   the app, where there is no chat session.)
+5. Export the unlabeled postings to CSV (`posting_id, title, description`).
+   Claude Code reads it in chunks and returns `posting_id, category`. Load
+   that back into the `labels` table with `label_source = 'llm'`. Keep the
+   returned CSVs on disk — that file *is* the audit trail, in place of the
+   API script.
+6. Calibrate on 40 postings you already hand-labeled. Compare. If agreement is
+   below ~75%, tell Claude the rules you're actually applying ("a
+   dashboards-heavy Data Scientist posting is Data analyst to me") and redo
+   those 40 before labeling the rest.
+7. Label all remaining postings. Store them in the `labels` table with
    `label_source` = 'hand' or 'llm'.
 8. Spot-check: sample 10% of the LLM-labeled rows, label them yourself
    without peeking, compute the agreement percentage. **Write the number in
-   the README.** This number is part of your project's credibility.
-9. Commit: "Phase 3: labels + agreement rate".
+   the README.** This number is part of your project's credibility — and it is
+   the *only* independent check on the machine labels, so it cannot be skipped
+   or delegated.
+9. **Decide the Classical ML question.** Only 10 of 6,636 postings match its
+   keyword hints, versus 112 for Deep learning. Either the hint list is too
+   narrow (five specific library names, where Deep learning gets the generic
+   phrase "deep learning") or the category genuinely isn't in this corpus.
+   Broaden the hints, re-run, and see if the count moves. If it stays near 10,
+   merge or drop the category and write that up — "my data doesn't contain
+   this class" is a real finding, and shipping an untrainable category into
+   Week 4 is not.
+10. Commit: "Phase 3: labels + agreement rate".
 
-✅ **Done when:** every posting has a label, and the README states your
-agreement rate.
+✅ **Done when:** every posting has a label, the README states your agreement
+rate **and how the labels were made**, and the Classical ML question is
+resolved one way or the other.
 
 ---
 

@@ -30,6 +30,7 @@ UOFT_INPUT_DATA = "data/raw/uoft_workstudy_summer2025.csv"
 UOFT_OUTPUT_DATA = "data/raw/uoft.csv"
 GREENHOUSE_OUTPUT_DATA = "data/raw/greenhouse.csv"
 PROCESSED_OUTPUT_DATA = "data/processed/all_postings.csv"
+HAND_LABELED_DATA = "data/processed/hand_label.xlsx"
 
 
 # --- Database ---

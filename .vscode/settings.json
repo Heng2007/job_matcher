@@ -1,3 +1,4 @@
 {
-  "python.terminal.executeInFileDir": false
+  "python.terminal.executeInFileDir": false,
+  "python.REPL.enableREPLSmartSend": false
 }
