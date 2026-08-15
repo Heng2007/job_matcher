@@ -161,8 +161,9 @@ questions with SELECT statements.
    **Seed the sample so all 8 categories actually appear in it** — run
    `analysis.skills_taxonomy.weak_label_category(f"{title} {description}")`
    over the corpus and draw from each category's pool, plus a random slice.
-   A purely random 200 gives ~0 Classical ML rows, and a category with no
-   training examples destroys macro-F1 in Week 4. The keyword guess only
+   Data engineering is only 3% of the corpus, so a purely random 200 gives ~7
+   of them — and a class with too few training examples destroys macro-F1 in
+   Week 4, which averages F1 equally across all 8. The keyword guess only
    decides *which postings you see*; every label is still yours.
 2. Label them yourself in 30-minute sittings across the week (about 40–50 per
    sitting). Use exactly the 8 category names from `config.py` — a typo like
@@ -189,19 +190,41 @@ questions with SELECT statements.
    the README.** This number is part of your project's credibility — and it is
    the *only* independent check on the machine labels, so it cannot be skipped
    or delegated.
-9. **Decide the Classical ML question.** Only 10 of 6,636 postings match its
-   keyword hints, versus 112 for Deep learning. Either the hint list is too
-   narrow (five specific library names, where Deep learning gets the generic
-   phrase "deep learning") or the category genuinely isn't in this corpus.
-   Broaden the hints, re-run, and see if the count moves. If it stays near 10,
-   merge or drop the category and write that up — "my data doesn't contain
-   this class" is a real finding, and shipping an untrainable category into
-   Week 4 is not.
+9. **Confirm the taxonomy change while labeling** (decided 2026-08-14, before
+   any labeling — see below). Two things to watch for as you read real
+   postings: whether merging Classical ML into Machine learning loses a
+   distinction you actually care about, and whether Data engineering is
+   pulling its weight as a separate class. Note either in the notes file.
 10. Commit: "Phase 3: labels + agreement rate".
 
-✅ **Done when:** every posting has a label, the README states your agreement
-rate **and how the labels were made**, and the Classical ML question is
-resolved one way or the other.
+✅ **Done when:** every posting has a label, and the README states your
+agreement rate **and how the labels were made**.
+
+### Taxonomy revision — decided 2026-08-14, before labeling began
+
+Two changes, still 8 categories:
+
+**Added `Data engineering`.** 826 postings (12.4%) use data-engineering
+vocabulary, and they were scattering across Data analyst (265), Not relevant
+(209) and Software engineering (203) — the same kind of posting sorted three
+ways, which teaches the classifier contradictions rather than a boundary. It's
+also a distinct learning path (Airflow, dbt, Kafka vs sklearn, PyTorch), which
+is what Week 8's unlock table exists to rank.
+
+**Merged `Classical ML` into `Machine learning`** (renamed from Deep learning,
+since the merged class is no longer deep-only). The distinguishing vocabulary
+isn't in this corpus: `feature engineering` 23, `clustering` 10, `decision
+tree` 0, original hints 23 — against 506 for the generic phrase "machine
+learning". Postings say "machine learning" and then name PyTorch. This is a
+README finding: **the market doesn't advertise classical ML as a separate
+thing.** The surviving axis is domain-based — NLP / LLM is language work,
+Machine learning is methods on everything else.
+
+**One trap found while measuring, worth remembering:** `spark` and `databricks`
+were excluded from the Data engineering hints because 565 of this corpus's
+6,636 postings are Databricks' own ads, and they name both in boilerplate
+regardless of role. A keyword that looks like a skill can be a company's
+house style — check the company spread before trusting any keyword count.
 
 ---
 
@@ -214,8 +237,9 @@ resolved one way or the other.
    Logistic Regression → print macro-F1 and the per-class report → train
    XGBoost on the same features → same report.
 2. Generate a confusion matrix image for your best model. Look at it. Name
-   the two categories it confuses most (predicting: Classical ML vs Data
-   analyst, based on how similar their postings read).
+   the two categories it confuses most (predicting: Data engineering vs Data
+   analyst — before Data engineering existed, 265 of its postings were pooling
+   as Data analyst, so that boundary is the thin one).
 3. Record each run in the `model_runs` table (date, model, macro-F1).
 4. Save the winning model + vectorizer to `models/`.
 5. Reality check: if macro-F1 is suspiciously high (>0.95), something leaked —

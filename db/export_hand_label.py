@@ -20,15 +20,7 @@ conn = sqlite3.connect(config.DB_PATH)
 df = pd.read_sql_query(("SELECT * FROM postings") , conn)
 # "id', 'external_id', 'source', 'company', 'title', 'description', 'url', 'fetched_at'"
 
-category = {
-    "Classical ML":[],
-    "Deep learning":[],
-    "NLP / LLM":[],
-    "Data analyst":[],
-    "Software engineering":[],
-    "Research assistant":[],
-    "Quant / finance":[],
-    "Not relevant":[]}
+category = {c: [] for c in config.CATEGORIES}
 
 
 

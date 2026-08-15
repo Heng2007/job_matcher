@@ -39,9 +39,9 @@ DB_PATH = "db/jobintel.sqlite"
 
 # --- Categories (8-way classifier) ---
 CATEGORIES = [
-    "Classical ML",
-    "Deep learning",
+    "Machine learning",
     "NLP / LLM",
+    "Data engineering",
     "Data analyst",
     "Software engineering",
     "Research assistant",

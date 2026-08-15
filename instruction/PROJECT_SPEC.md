@@ -93,9 +93,11 @@ job-intel/
 
 ## Key design decisions (do not change without asking owner)
 
-1. **One 8-way classifier**, not binary + multiclass. Categories: Classical ML,
-   Deep learning, NLP / LLM, Data analyst, Software engineering, Research
-   assistant, Quant / finance, Not relevant. Relevance score = 1 − P(Not relevant).
+1. **One 8-way classifier**, not binary + multiclass. Categories: Machine
+   learning, NLP / LLM, Data engineering, Data analyst, Software engineering,
+   Research assistant, Quant / finance, Not relevant. Relevance score =
+   1 − P(Not relevant). *(Revised 2026-08-14 before labeling: added Data
+   engineering, merged Classical ML into Machine learning — see HANDBOOK Week 3.)*
 2. **Skill extraction is regex, not ML.** Word-boundary patterns for short
    tokens (R, AI, ML, NLP, LLM) — plain substring matching false-positives on
    words like "training" and "enrollment". **The same rule applies to the
