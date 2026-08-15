@@ -99,21 +99,13 @@ SKILL_TIER: dict[str, int] = {
 
 CATEGORIES = config.CATEGORIES
 
-# Rough keyword cues per category -- useful as a weak-labeling heuristic to
-# pre-fill labels before you review them, not a substitute for real labeling.
-# Order is the tie-break rule: weak_label_category picks the winner with max(),
-# which returns the FIRST key at the winning score. "Data engineering" sits
-# after the modelling categories (an ML job that mentions a pipeline is still
-# ML) but before Data analyst and Software engineering, which were absorbing
-# data-engineering postings before this category existed.
+
 CATEGORY_HINTS: dict[str, list[str]] = {
     "Machine learning": ["machine learning", "neural network", "pytorch", "tensorflow",
                          "deep learning", "cnn", "lstm", "random forest", "xgboost",
                          "logistic regression", "scikit-learn", "gradient boosting",
                          "feature engineering"],
     "NLP / LLM": ["nlp", "llm", "bert", "transformer", "huggingface", "generative ai", "prompt engineering"],
-    # Deliberately NOT "spark"/"databricks": 565 of this corpus's 6,636 postings
-    # are Databricks' own ads, and they name both in boilerplate regardless of role.
     "Data engineering": ["data engineer", "data engineering", "data pipeline", "etl", "elt",
                          "airflow", "dbt", "kafka", "snowflake", "data warehouse", "data lake"],
     "Data analyst": ["dashboard", "tableau", "power bi", "sql", "reporting", "kpi"],

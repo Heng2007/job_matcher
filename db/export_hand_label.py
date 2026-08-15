@@ -50,4 +50,4 @@ for posting in export["external_id"]:
 df1 = pd.DataFrame(export)
 df1["category"] = ""
 
-spread_sheet = df1.to_excel(config.HAND_LABELED_DATA,index = False)
+spread_sheet = df1.to_excel(config.HAND_LABELED_DATA, index = False)
