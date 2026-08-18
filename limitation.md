@@ -1,2 +1,3 @@
-1. Deep Learning and NLP/LLM has a lot of overlap, it is hard to classify a job between NLP/LLM
-2. The 8 category are not enough for some jobs that are applicable to me, eg. data engineer
+1. Machine Learning and NLP/LLM has a lot of overlap, it is hard to classify a job between them.
+2. Many postings have requirements that match the category, but they are actually organizer position if look closely on the description.
+3. 
