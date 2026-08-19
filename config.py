@@ -31,6 +31,7 @@ UOFT_OUTPUT_DATA = "data/raw/uoft.csv"
 GREENHOUSE_OUTPUT_DATA = "data/raw/greenhouse.csv"
 PROCESSED_OUTPUT_DATA = "data/processed/all_postings.csv"
 HAND_LABELED_DATA = "data/processed/hand_label.xlsx"
+HAND_LABEL_TOPUP_DATA = "data/processed/hand_label_topup.xlsx"
 
 
 # --- Database ---
