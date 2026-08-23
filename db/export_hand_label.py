@@ -15,18 +15,6 @@ import analysis.skills_taxonomy as identifier
 import config
 
 
-# This script overwrites the sheet unconditionally, which destroys hand labels.
-# Refuse to run if the existing file has any category filled in.
-if Path(config.HAND_LABELED_DATA).exists():
-    existing = pd.read_excel(config.HAND_LABELED_DATA)
-    if "category" in existing and existing["category"].notna().any():
-        raise SystemExit(
-            f"Refusing to overwrite {config.HAND_LABELED_DATA}: "
-            f"{existing['category'].notna().sum()} of {len(existing)} rows are already labeled. "
-            "Move or rename the file first if you really want a fresh sheet."
-        )
-
-
 conn = sqlite3.connect(config.DB_PATH)
 
 df = pd.read_sql_query(("SELECT * FROM postings") , conn)

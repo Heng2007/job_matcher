@@ -110,10 +110,6 @@ CATEGORY_HINTS: dict[str, list[str]] = {
                          "airflow", "dbt", "kafka", "snowflake", "data warehouse", "data lake"],
     "Data analyst": ["dashboard", "tableau", "power bi", "sql", "reporting", "kpi"],
     "Software engineering": ["api", "backend", "ci/cd", "microservice", "software engineer", "full stack"],
-    # Bare "lab" was removed: it matched SpaceX manufacturing labs ("Chemical Lab
-    # Technician"), Anthropic calling itself "an AI lab", and put 218 non-research
-    # postings in this pool. Research-scoped phrases have zero SpaceX hits and
-    # catch more genuine UofT postings than dropping the keyword outright.
     "Research assistant": ["research assistant", "principal investigator", "literature review",
                            "research lab", "research group", "research project", "postdoctoral",
                            "research associate", "research intern"],
