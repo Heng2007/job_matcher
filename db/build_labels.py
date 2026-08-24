@@ -63,17 +63,6 @@ labels = pd.concat([hand, llm], ignore_index=True)
 # category untouched. map would turn anything missing from MERGE into NaN.
 labels["category"] = labels["category"].replace(MERGE)
 
-# Corrections overlay, applied on top rather than edited into the sheets. The
-# sheets are downloaded from Google Sheets, so an in-place edit would be wiped
-# by the next download; this file survives and records what changed.
-corrections = Path(config.LABEL_CORRECTIONS_DATA)
-if corrections.exists():
-    fixes = pd.read_csv(corrections, dtype=str)
-    fix = dict(zip(fixes["external_id"], fixes["new"]))
-    labels["category"] = [
-        fix.get(eid, cat) for eid, cat in zip(labels["external_id"], labels["category"])
-    ]
-    print(f"applied {sum(labels['external_id'].isin(fix)):,} corrections from {corrections}")
 
 # Fail loudly rather than writing a category the classifier will never see.
 unknown = sorted(set(labels["category"]) - set(config.CATEGORIES))

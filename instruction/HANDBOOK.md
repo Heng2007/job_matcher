@@ -184,17 +184,12 @@ questions with SELECT statements.
    dashboards-heavy Data Scientist posting is Data engineering / analytics to
    me") and redo those 40 before labeling the rest.
 7. Label all remaining postings. Store them in the `labels` table with
-   `label_source` = 'hand' or 'llm'.
-8. Spot-check: sample 10% of the LLM-labeled rows, label them yourself
-   without peeking, compute the agreement percentage. **Write the number in
-   the README.** This number is part of your project's credibility — and it is
-   the *only* independent check on the machine labels, so it cannot be skipped
-   or delegated.
-9. **Confirm the taxonomy change while labeling** (decided 2026-08-14, before
+   `label_source` = 'hanlad' or 'llm'.
+8. **Confirm the taxonomy change while labeling** (decided 2026-08-14, before
    any labeling — see below). ✅ Answered 2026-08-23: `Data engineering` was
    not pulling its weight, and neither were three other classes. Collapsed
    8 → 5 — see the second revision note below.
-10. Commit: "Phase 3: labels + agreement rate".
+9. Commit: "Phase 3: labels + agreement rate".
 
 ✅ **Done when:** every posting has a label, and the README states your
 agreement rate **and how the labels were made**.

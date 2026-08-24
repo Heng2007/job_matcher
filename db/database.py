@@ -40,7 +40,8 @@ def upsert_postings(conn: sqlite3.Connection):
 
     cur.executemany("INSERT OR IGNORE INTO postings(external_id, source, company, title, description, url, fetched_at)"
                  "VALUES(?,?,?,?,?,?,?)"
-                 , df[["external_id", "source", "company", "title", "description", "url", "fetched_at"]].itertuples(False, None))
+                 , df[["external_id", "source", "company", "title", "description", 
+                       "url", "fetched_at"]].itertuples(False, None))
     conn.commit()
 
     return cur.rowcount, len(df) - cur.rowcount 
@@ -67,11 +68,13 @@ def row_count(conn:sqlite3.Connection):
     cur.execute("SELECT COUNT(*) FROM postings")
     return cur.fetchall()[0][0]
 
-
-
-if __name__ == "__main__":
-    create_schema(conn)
-    print(upsert_postings(conn))
-
-
-
+def insert_labels(conn: sqlite3.Connection):
+    """insert labled data into the table - labels"""
+    df = pd.read_csv(config.FINAL_LABELS_DATA)
+    cur = conn.cursor()
+    cur.executemany("INSERT OR IGNORE INTO labels(posting_id, category, label_source)"
+                    "SELECT id, ?, ? FROM postings WHERE external_id = ?"
+                    , df[["category", "label_source", "external_id"]].itertuples(False, None))
+    conn.commit()
+    return cur.rowcount, len(df) - cur.rowcount
+    
