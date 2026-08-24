@@ -8,7 +8,7 @@ A personal tool that classifies job postings, scores them against my current ski
 
 ## Methodology
 How the labels for training were made:
-220 lables are hand labeled by me, the rest of 6416 labels are labeled by LLM. 'label_source' distinguishing them.
+220 lables are hand labeled by me, the rest of 6416 labels are labeled by LLM. `label_source` distinguishing them.
 ## Results
 
 ## Limitations
