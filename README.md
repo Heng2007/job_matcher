@@ -5,11 +5,15 @@ A personal tool that classifies job postings, scores them against my current ski
 ## Setup
 
 ## Data Sources
-
+|--------------|------|-------------------------------------------------------------------------------------|
 |    source    | rows |                           description                                               |
+|--------------|------|-------------------------------------------------------------------------------------|
 | Greenhouse   | 4664 |           public Greenhouse Job Board API, picked 20 companies                      |
+|--------------|------|-------------------------------------------------------------------------------------|
 | Kaggle       | 1667 | https://www.kaggle.com/datasets/arshkon/linkedin-job-postings, pick 1200 out of 120k|
-| CLNx         | 805  |                   UofT 2025 summer work study program                               |            
+|--------------|------|-------------------------------------------------------------------------------------|
+| CLNx         | 805  |                   UofT 2025 summer work study program                               |       
+|--------------|------|-------------------------------------------------------------------------------------|
 ## Methodology
 1. How the labels for training were made: 220 lables are hand labeled by me, the rest of 6416 labels are labeled by LLM. `label_source` distinguishing them.
 ## Results
