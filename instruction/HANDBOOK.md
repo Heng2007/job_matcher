@@ -146,7 +146,7 @@ questions with SELECT statements.
 
 ## Week 3 (Aug 17–23) — Phase 3: Labeling  ⚠️ the wall — protect this week
 
-**Goal: every posting has one of the 8 categories, and you know how much to trust the labels.**
+**Goal: every posting has one of the 5 categories, and you know how much to trust the labels.**
 
 > **Deviation from PROJECT_SPEC, decided 2026-08-14.** The original plan bought
 > a Claude API key and ran `ml/label_llm.py` over the corpus (~$3.50). I'm doing
@@ -158,16 +158,16 @@ questions with SELECT statements.
 
 1. Hand-labeling first. Pull 150–200 postings out of the database (mix of all
    three sources). Put them in a spreadsheet with an empty `category` column.
-   **Seed the sample so all 8 categories actually appear in it** — run
+   **Seed the sample so all 5 categories actually appear in it** — run
    `analysis.skills_taxonomy.weak_label_category(f"{title} {description}")`
    over the corpus and draw from each category's pool, plus a random slice.
-   Data engineering is only 3% of the corpus, so a purely random 200 gives ~7
-   of them — and a class with too few training examples destroys macro-F1 in
-   Week 4, which averages F1 equally across all 8. The keyword guess only
+   Data roles are under 2% of the corpus, so a purely random 200 gives barely
+   any — and a class with too few training examples destroys macro-F1 in
+   Week 4, which averages F1 equally across all 5. The keyword guess only
    decides *which postings you see*; every label is still yours.
 2. Label them yourself in 30-minute sittings across the week (about 40–50 per
-   sitting). Use exactly the 8 category names from `config.py` — a typo like
-   "NLP/LLM" vs "NLP / LLM" will break training later.
+   sitting). Use exactly the 5 category names from `config.py` — a typo like
+   "Machine learning/AI" vs "Machine learning / AI" will break training later.
 3. While labeling, write down (in a notes file) which categories you found
    hard to tell apart. This becomes your README's limitations section.
 4. ~~Get a Claude API key.~~ **Skipped — no key, no `.env`, no spend.** Claude
@@ -181,8 +181,8 @@ questions with SELECT statements.
    API script.
 6. Calibrate on 40 postings you already hand-labeled. Compare. If agreement is
    below ~75%, tell Claude the rules you're actually applying ("a
-   dashboards-heavy Data Scientist posting is Data analyst to me") and redo
-   those 40 before labeling the rest.
+   dashboards-heavy Data Scientist posting is Data engineering / analytics to
+   me") and redo those 40 before labeling the rest.
 7. Label all remaining postings. Store them in the `labels` table with
    `label_source` = 'hand' or 'llm'.
 8. Spot-check: sample 10% of the LLM-labeled rows, label them yourself
@@ -191,10 +191,9 @@ questions with SELECT statements.
    the *only* independent check on the machine labels, so it cannot be skipped
    or delegated.
 9. **Confirm the taxonomy change while labeling** (decided 2026-08-14, before
-   any labeling — see below). Two things to watch for as you read real
-   postings: whether merging Classical ML into Machine learning loses a
-   distinction you actually care about, and whether Data engineering is
-   pulling its weight as a separate class. Note either in the notes file.
+   any labeling — see below). ✅ Answered 2026-08-23: `Data engineering` was
+   not pulling its weight, and neither were three other classes. Collapsed
+   8 → 5 — see the second revision note below.
 10. Commit: "Phase 3: labels + agreement rate".
 
 ✅ **Done when:** every posting has a label, and the README states your
@@ -226,6 +225,40 @@ were excluded from the Data engineering hints because 565 of this corpus's
 regardless of role. A keyword that looks like a skill can be a company's
 house style — check the company spread before trusting any keyword count.
 
+### Taxonomy revision — decided 2026-08-23, after all 6,636 were labeled
+
+**Collapsed 8 categories to 5.** Final counts across the whole corpus:
+
+| | count | % |
+|---|---:|---:|
+| Not relevant | 5172 | 77.9 |
+| Software engineering | 950 | 14.3 |
+| Machine learning | 217 | 3.3 |
+| Research assistant | 131 | 2.0 |
+| Data engineering | 62 | 0.9 |
+| NLP / LLM | 48 | 0.7 |
+| Data analyst | 46 | 0.7 |
+| Quant / finance | 10 | 0.15 |
+
+Four classes under 1%. Macro-F1 weights every class equally, so with ~10 test
+examples in a class a single misclassification moves the headline number by
+more than a point — the metric would measure sampling noise. Merged
+`Machine learning` + `NLP / LLM` → **Machine learning / AI**, `Data engineering`
++ `Data analyst` → **Data engineering / analytics**, and folded
+`Quant / finance` into `Not relevant`. Smallest class is now 108. Merging is a
+remap of labels that already exist, so it cost no relabeling —
+`db/build_labels.py` applies it.
+
+**The 826 number above was wrong, and the reason it was wrong is the lesson.**
+`Data engineering` was added on the strength of "826 postings use
+data-engineering vocabulary". After labeling every posting, the real count is
+**62** — thirteen times fewer. The 826 counted postings that *mention* Airflow,
+ETL or pipelines, which at Databricks and Stripe is nearly every ad regardless
+of role. **A keyword count measures vocabulary, not jobs.** Same failure as
+`lab` matching SpaceX manufacturing technicians, and as the `Data analyst`
+keyword pool turning out to be 1,270 accountants. Sampling more could not have
+fixed it: only 29 postings in the corpus carry a data-role title at all.
+
 ---
 
 ## Week 4 (Aug 24–30) — Phase 4: Baseline models  🏁 the milestone week
@@ -237,9 +270,7 @@ house style — check the company spread before trusting any keyword count.
    Logistic Regression → print macro-F1 and the per-class report → train
    XGBoost on the same features → same report.
 2. Generate a confusion matrix image for your best model. Look at it. Name
-   the two categories it confuses most (predicting: Data engineering vs Data
-   analyst — before Data engineering existed, 265 of its postings were pooling
-   as Data analyst, so that boundary is the thin one).
+   the two categories it confuses most.
 3. Record each run in the `model_runs` table (date, model, macro-F1).
 4. Save the winning model + vectorizer to `models/`.
 5. Reality check: if macro-F1 is suspiciously high (>0.95), something leaked —

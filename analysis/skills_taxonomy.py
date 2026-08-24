@@ -100,20 +100,29 @@ SKILL_TIER: dict[str, int] = {
 CATEGORIES = config.CATEGORIES
 
 
+# Keys must stay in sync with config.CATEGORIES, or weak_label_category returns
+# a category name that no longer exists. These hints now only decide WHICH
+# postings get sampled for review -- every posting in the corpus is labeled.
 CATEGORY_HINTS: dict[str, list[str]] = {
-    "Machine learning": ["machine learning", "neural network", "pytorch", "tensorflow",
-                         "deep learning", "cnn", "lstm", "random forest", "xgboost",
-                         "logistic regression", "scikit-learn", "gradient boosting",
-                         "feature engineering"],
-    "NLP / LLM": ["nlp", "llm", "bert", "transformer", "huggingface", "generative ai", "prompt engineering"],
-    "Data engineering": ["data engineer", "data engineering", "data pipeline", "etl", "elt",
-                         "airflow", "dbt", "kafka", "snowflake", "data warehouse", "data lake"],
-    "Data analyst": ["dashboard", "tableau", "power bi", "sql", "reporting", "kpi"],
+    "Machine learning / AI": ["machine learning", "neural network", "pytorch", "tensorflow",
+                              "deep learning", "cnn", "lstm", "random forest", "xgboost",
+                              "logistic regression", "scikit-learn", "gradient boosting",
+                              "feature engineering",
+                              "nlp", "llm", "bert", "transformer", "huggingface",
+                              "generative ai", "prompt engineering"],
+    # "sql", "reporting" and "kpi" dropped from the analytics side: all three are
+    # finance-department words and pooled 1,270 postings that were overwhelmingly
+    # Financial Analyst / Accountant / Controller. Only 29 postings in the whole
+    # corpus carry an actual data-role title.
+    "Data engineering / analytics": ["data engineer", "data engineering", "data pipeline",
+                                     "etl", "elt", "airflow", "dbt", "kafka", "snowflake",
+                                     "data warehouse", "data lake",
+                                     "dashboard", "tableau", "power bi", "data analyst",
+                                     "analytics", "business intelligence"],
     "Software engineering": ["api", "backend", "ci/cd", "microservice", "software engineer", "full stack"],
     "Research assistant": ["research assistant", "principal investigator", "literature review",
                            "research lab", "research group", "research project", "postdoctoral",
                            "research associate", "research intern"],
-    "Quant / finance": ["trading", "portfolio", "quantitative analyst", "risk model", "stochastic"],
 }
 
 

@@ -32,22 +32,28 @@ GREENHOUSE_OUTPUT_DATA = "data/raw/greenhouse.csv"
 PROCESSED_OUTPUT_DATA = "data/processed/all_postings.csv"
 HAND_LABELED_DATA = "data/processed/hand_label.xlsx"
 HAND_LABEL_TOPUP_DATA = "data/processed/hand_label_topup.xlsx"
+HAND_LABELED_DONE = "data/processed/hand_label_me.xlsx"
+HAND_LABEL_TOPUP_DONE = "data/processed/hand_label_topup_me.xlsx"
+LLM_LABELED_DATA = "data/processed/llm_labels.csv"
+LABEL_CORRECTIONS_DATA = "data/processed/label_corrections.csv"
+FINAL_LABELS_DATA = "data/processed/labels_final.csv"
 
 
 # --- Database ---
 DB_FILENAME = "jobintel.sqlite"
 DB_PATH = "db/jobintel.sqlite"
 
-# --- Categories (8-way classifier) ---
+# --- Categories (5-way classifier) ---
+# Collapsed from 8 on 2026-08-23, after labeling all 6,636 postings revealed
+# four classes under 1% of the data: Data engineering 62, NLP / LLM 48,
+# Data analyst 46, Quant / finance 10. Macro-F1 weights every class equally,
+# so a 10-example class measures sampling noise, not the model.
 CATEGORIES = [
-    "Machine learning",
-    "NLP / LLM",
-    "Data engineering",
-    "Data analyst",
+    "Machine learning / AI",          # was Machine learning + NLP / LLM
+    "Data engineering / analytics",   # was Data engineering + Data analyst
     "Software engineering",
     "Research assistant",
-    "Quant / finance",
-    "Not relevant",
+    "Not relevant",                   # absorbed Quant / finance (10 postings)
 ]
 
 NOT_RELEVANT_CATEGORY = "Not relevant"

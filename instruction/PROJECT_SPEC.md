@@ -76,7 +76,7 @@ job-intel/
 │   └── embeddings.py          # STUB: all-MiniLM-L6-v2 features, same heads, keep only if beats TF-IDF
 │
 ├── analysis/
-│   ├── skills_taxonomy.py     # regex skill patterns + tiers + 8 categories (port from starter kit)
+│   ├── skills_taxonomy.py     # regex skill patterns + tiers + 5 categories (port from starter kit)
 │   ├── match_scoring.py       # STUB: match %, near-misses (≤2 missing), unlock table
 │   └── semantic_search.py     # STUB: embed corpus, cosine top-k "more like this"
 │
@@ -93,11 +93,14 @@ job-intel/
 
 ## Key design decisions (do not change without asking owner)
 
-1. **One 8-way classifier**, not binary + multiclass. Categories: Machine
-   learning, NLP / LLM, Data engineering, Data analyst, Software engineering,
-   Research assistant, Quant / finance, Not relevant. Relevance score =
-   1 − P(Not relevant). *(Revised 2026-08-14 before labeling: added Data
-   engineering, merged Classical ML into Machine learning — see HANDBOOK Week 3.)*
+1. **One 5-way classifier**, not binary + multiclass. Categories: Machine
+   learning / AI, Data engineering / analytics, Software engineering, Research
+   assistant, Not relevant. Relevance score = 1 − P(Not relevant).
+   *(Revised 2026-08-14 before labeling: added Data engineering, merged
+   Classical ML into Machine learning. Revised again 2026-08-23 after labeling
+   all 6,636 postings: collapsed 8 → 5, because four classes came in under 1%
+   of the data — Data engineering 62, NLP / LLM 48, Data analyst 46, Quant /
+   finance 10 — and macro-F1 weights every class equally. See HANDBOOK Week 3.)*
 2. **Skill extraction is regex, not ML.** Word-boundary patterns for short
    tokens (R, AI, ML, NLP, LLM) — plain substring matching false-positives on
    words like "training" and "enrollment". **The same rule applies to the
