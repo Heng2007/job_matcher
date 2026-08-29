@@ -22,6 +22,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import sqlite3
+import torch
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.linear_model import LogisticRegression
@@ -30,6 +31,7 @@ from sklearn.metrics import classification_report
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import config
+
 
 
 
