@@ -24,6 +24,10 @@ import pandas as pd
 import sqlite3
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer 
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+
+
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import config
 
@@ -40,7 +44,18 @@ Y = df["category"]
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, stratify= Y, test_size= 0.2, random_state= config.RANDOM_SEED)
 
 vectorizer = TfidfVectorizer()
-fitted = vectorizer.fit_transform(X_train)
-print(X.shape)
+fitted_x_train = vectorizer.fit_transform(X_train)
+fitted_x_test = vectorizer.transform(X_test)
 
-#.venv/bin/python -m ml.train
+
+
+model = LogisticRegression(C = 100, class_weight = "balanced", solver= "lbfgs", max_iter= 1000).fit(fitted_x_train, Y_train)
+
+
+def predict(input):
+        """Return the predicted outcome(s) as a numpy array of label strings."""
+        model_prediction = model.predict(input)
+        return model_prediction
+
+print(classification_report(Y_test, predict(fitted_x_test)))
+
