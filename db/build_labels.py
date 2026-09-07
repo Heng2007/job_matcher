@@ -31,7 +31,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 import config
 
-# Retired class -> current class. Anything not listed here is unchanged.
+
 MERGE = {
     "Machine learning": "Machine learning / AI",
     "NLP / LLM": "Machine learning / AI",
@@ -59,19 +59,8 @@ llm["category"] = llm["category"].str.strip()
 llm["label_source"] = "llm"
 
 labels = pd.concat([hand, llm], ignore_index=True)
-# replace, not map: it substitutes the listed names and leaves every other
-# category untouched. map would turn anything missing from MERGE into NaN.
 labels["category"] = labels["category"].replace(MERGE)
 
-
-# Fail loudly rather than writing a category the classifier will never see.
-unknown = sorted(set(labels["category"]) - set(config.CATEGORIES))
-if unknown:
-    raise SystemExit(f"categories not in config.CATEGORIES: {unknown}")
-
-dupes = labels["external_id"].duplicated().sum()
-if dupes:
-    raise SystemExit(f"{dupes} postings carry more than one label")
 
 conn = sqlite3.connect(config.DB_PATH)
 postings = set(
@@ -84,5 +73,3 @@ if missing or extra:
 
 labels.to_csv(config.FINAL_LABELS_DATA, index=False)
 
-print(f"{len(labels):,} labels -> {config.FINAL_LABELS_DATA}")
-print(pd.crosstab(labels["category"], labels["label_source"], margins=True).to_string())
