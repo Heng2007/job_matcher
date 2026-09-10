@@ -17,17 +17,17 @@ A personal tool that classifies job postings, scores them against my current ski
 
 
 Logistic Regression
-                              precision    recall  f1-score   support
+                               |precision  | recall | f1-score |  support|
 -----------------------------------------------------------------------------------------------------------
-Data engineering / analytics       0.36      0.38      0.37        21
-       Machine learning / AI       0.93      0.83      0.88        52
-                Not relevant       0.97      0.96      0.97      1038
-          Research assistant       0.51      0.70      0.59        27
-        Software engineering       0.87      0.89      0.88       190
-
-                    accuracy                           0.93      1328
-                   macro avg       0.73      0.75      0.74      1328
-                weighted avg       0.94      0.93      0.94      1328
+Data engineering / analytics   |    0.36   |   0.38 |     0.37 |       21|
+       Machine learning / AI   |    0.93   |   0.83 |     0.88 |       52|
+                Not relevant   |    0.97   |   0.96 |     0.97 |     1038|
+          Research assistant   |    0.51   |   0.70 |     0.59 |       27|
+        Software engineering   |    0.87   |   0.89 |     0.88 |      190|
+                               |           |        |          |         |
+                    accuracy   |           |        |     0.93 |     1328|
+                   macro avg   |    0.73   |   0.75 |     0.74 |     1328|
+                weighted avg   |    0.94   |   0.93 |     0.94 |     1328|
 ## Limitations
 1. Since the original category, `NLP / LLM` and `Machain Learning`, are hard to differ. They are collapsed into one category, the cost is that the model can no longer find a job specicifically for `NLP / LLM` or specifically for `Machain Learning`. 
 2. Only single digit number of `quant/finance` job present in the 6 thousands postings in training data, therefore the category is removed. The cost is that the model can no longer identify `quant/finance` jobs.
