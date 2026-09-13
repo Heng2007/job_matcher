@@ -113,4 +113,15 @@ mlp_model = nn.modules.Sequential(nn.Linear(len(x_train_tensor[1]), 256),
                                   )
 
 
+def train(mlp, n_epoch = 10, report_every = 50):
+        current_loss = 0
+        all_losses = []
+        train(mlp)
+        optimizer = torch.optim.SGD(mlp_model.parameters(), lr = config.LEARNING_RATE)
+        output = mlp(x_train_tensor)
+        loss = nn.CrossEntropyLoss(output)
+        
+
+
+
 
