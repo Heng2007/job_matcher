@@ -23,7 +23,10 @@ from pathlib import Path
 import pandas as pd
 import sqlite3
 import torch
+import torch.nn as nn
 import numpy as np
+from torch.utils.data import TensorDataset, DataLoader
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.linear_model import LogisticRegression
@@ -49,8 +52,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, stratify= Y, test_size
 vectorizer = TfidfVectorizer()
 fitted_x_train = vectorizer.fit_transform(X_train)
 fitted_x_test = vectorizer.transform(X_test)
-fitted_y_train = vectorizer.fit_transform(Y_train)
-fitted_y_test = vectorizer.transform(Y_test)
+
 
 
 
@@ -79,7 +81,36 @@ def logistic_predict(input):
 #  fair and the net will just learn "Not relevant". And set torch.manual_seed(config.RANDOM_SEED) 
 # or your numbers move every run
 
+x_train_tensor = torch.tensor(fitted_x_train.todense(), dtype =torch.float32) 
+x_test_tensor = torch.tensor(fitted_x_test.todense(), dtype = torch.float32) 
 
-x_train_tensor = torch.tensor(fitted_x_train.toarray(), dtype =torch.float32)
-x_test_tensor = torch.tensor(fitted_x_test.toarray(), dtype = torch.float32)
+label_encoder = LabelEncoder()
+
+#encode the labels
+encoded_y_train = label_encoder.fit_transform(Y_train)
+encoded_y_test = label_encoder.transform(Y_test)
+
+#change the datatype of the encoded labels to torch.long
+y_train_tensor = torch.tensor(encoded_y_train, dtype = torch.long)
+y_test_tensor = torch.tensor(encoded_y_test, dtype = torch.long)
+
+#make it ready for dataloader
+train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
+test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
+
+
+train_loader = DataLoader(train_dataset, config.BATCH_SIZE, shuffle = True)
+test_loader = DataLoader(test_dataset, config.BATCH_SIZE, shuffle = False )
+
+
+
+#The basic multilayer perception model
+#Sequential replaced the class and forward()
+mlp_model = nn.modules.Sequential(nn.Linear(len(x_train_tensor[1]), 256),
+                                  nn.ReLU(),
+                                  nn.Dropout(p = 0.5),
+                                  nn.Linear(256,len(label_encoder.classes_)),
+                                  )
+
+
 
